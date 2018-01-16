@@ -17,9 +17,9 @@ if(assTeacherDao.assTeacherLogin(user)){
 	out.print("助教登录成功<br>");
 	out.print("学号："+userAssTeacher.getAssTeacherID()+"<br>");
 	out.print("姓名："+userAssTeacher.getName()+"<br>");
-	session.setAttribute("User", userAssTeacher);
+	session.setAttribute("user", userAssTeacher);
 	session.setAttribute("identity", "assteacher");
-	response.sendRedirect(request.getContextPath()+"/teacher/index.jsp");
+	response.sendRedirect(request.getContextPath()+"/assteacher/index.jsp");
 }else{
 	out.print("登陆失败，用户名或密码错误,3秒后自动返回登录界面");
 	response.setHeader("refresh", "3;URL=index.jsp");

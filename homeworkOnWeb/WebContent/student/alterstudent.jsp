@@ -140,7 +140,7 @@
                             <!-- Themes functionality initialized in App() -> 登录人员名称 -->
                             <div class="btn-group pull-right">
                                 
-                                    <i class="glyphicon glyphicon-user"><a href="../index.jsp">退出</a></i>
+                                    <i class="glyphicon glyphicon-user"><a href="${pageContext.request.contextPath}/index.jsp">退出</a></i>
                                 
                                 
                             </div>

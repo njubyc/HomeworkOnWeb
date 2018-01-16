@@ -64,7 +64,7 @@ public class ModifyPassword extends HttpServlet {
 			AssTeacherDao assTeacherDao = new AssTeacherDao();
 			assTeacherDao.modifyPassword(((AssTeacher) session.getAttribute("user")).getAssTeacherID(),newPassword);
 			response.sendRedirect(request.getContextPath()
-					+ "/teacher/index.jsp");
+					+ "/assteacher/index.jsp");
 		} else {
 			response.sendRedirect(request.getContextPath() + "/index.jsp");
 		}

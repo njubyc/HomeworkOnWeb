@@ -1,4 +1,5 @@
 <%@page import="org.apache.catalina.User"%>
+<%@page import="com.chen.users.Question"%>
 <%@page import="com.chen.users.Homework"%>
 <%@page import="com.chen.users.Student"%>
 <%@page import="com.chen.jdbc.JdbcUtils"%>
@@ -130,9 +131,8 @@ Student student = (Student)request.getSession().getAttribute("user");
                             <!-- Themes functionality initialized in App() -> 登录人员名称 -->
                             <div class="btn-group pull-right">
                                 
-                                    <i class="glyphicon glyphicon-user"><a href="../index.jsp">退出</a></i>
-                                
-                                
+                                    <i class="glyphicon glyphicon-user"><a href="${pageContext.request.contextPath}/index.jsp">退出</a></i>
+                                                               
                             </div>
                             <a class="h5 text-white" href="index.jsp">
                                 <span class="h4 font-w600 sidebar-mini-hide">${user.getName()}
@@ -214,6 +214,7 @@ Student student = (Student)request.getSession().getAttribute("user");
                                         <th >截止时间</th>
                                         <th >作业状态</th>
                                         <th >提交状态</th>
+                                        <th >查看作业</th>
                                       </tr>
 
                                 </thead>
@@ -227,7 +228,13 @@ Student student = (Student)request.getSession().getAttribute("user");
                                  int i = 1;
                                  for(Homework homework:homeworks)
                                  {
-                                	 
+                                	 homework.setQuestions(studentDao.showHomeworkTsk(homework.getHomeworkID()));
+                                	 String homeworkState = "已提交";
+ 											for (Question question : homework.getQuestions()) {
+ 													question=studentDao.getTskStu(question, student.getStuID(),homework.getHomeworkID());
+ 													if(!question.getTskState().equals("已提交"))
+ 														homeworkState = "未提交";
+ 											}
                                  %>
 								  <tr>
                                    
@@ -236,8 +243,8 @@ Student student = (Student)request.getSession().getAttribute("user");
                                         <td class="font-w600"><%=homework.getHomeworkTitle() %></td>
                                         <td class="font-w600"><%=homework.getDeadline() %></td>
                                         <td class="hidden-xs"><%=homework.getHomeworkState() %></td>
-                                        <td class="text-center"><%=homework.getTskState() %></td>
-                                        
+                                        <td class="text-center"><%=homeworkState %></td>
+                                        <td><input type="button" value="查看" ONCLICK="window.location.href('${pageContext.request.contextPath}/student/seehomeworkdetail.jsp?homeworkID=<%=homework.getHomeworkID() %>')"/></td>
                                     </tr> 
                                     <%
                                     i++;

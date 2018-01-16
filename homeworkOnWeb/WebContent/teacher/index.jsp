@@ -1,11 +1,17 @@
 
+<%@page import="com.chen.users.Teacher"%>
 <%@page import="org.apache.catalina.User"%>
 <%@page import="com.chen.users.Student"%>
+<%@page import="com.chen.users.Class"%>
 <%@page import="com.chen.jdbc.JdbcUtils"%>
-
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-
+<jsp:useBean id="teacherDao" class="com.chen.dao.TeacherDao"/>
+<%
+Teacher teacher = (Teacher)request.getSession().getAttribute("user");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html class="no-focus">
 <head>
@@ -120,7 +126,7 @@
                                 
                                 <li class="nav-main-heading"><span class="sidebar-mini-hide">信息管理</span></li>
                                 <li>
-                                    <a class="nav-submenu" data-toggle="nav-submenu" href="ModifyPassword.jsp"><i class="glyphicon glyphicon-cog"></i><span class="sidebar-mini-hide">修改密码</span></a>
+                                    <a class="nav-submenu" data-toggle="nav-submenu" href="alterstudent.jsp"><i class="glyphicon glyphicon-cog"></i><span class="sidebar-mini-hide">修改密码</span></a>
                                     
                                 </li>
                                
@@ -206,10 +212,47 @@
                             <!-- Dynamic Table Full -->
                     <div class="block">
                         <div class="block-header">
-                            <h3 class="block-title">我的作业 </h3>
+                            <h3 class="block-title">我的班级 </h3>
                         </div>
                         <div class="block-content">
-                           
+                           <div class="block-content">
+                            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
+                            <table class="table table-bordered table-striped js-dataTable-full">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center"></th>
+                                        <th class="hidden-xs">班级</th>
+                                        <th class="hidden-xs">课程</th>
+                                        
+                                    </tr>
+
+                                </thead>
+                                
+                                <tbody>
+                                 <%
+                                 List<Class> classes =teacherDao.showClasses(teacher.getTeacherID());
+                                 //List<Homework> homeworks =studentDao.seeAllHomework();
+                                 int i = 1;
+                                 for(Class classD:classes)
+                                 {
+                                	 
+                                 %>
+								  <tr>
+                                   
+                                        <td class="text-center"><%=i %></td>
+                                        <td class="font-w600"><%=classD.getClassID() %></td>
+                                        <td class="font-w600"><%=classD.getCourse() %></td>
+                                      
+                                        
+                                    </tr> 
+                                    <%
+                                    i++;
+                                 }
+                                 %>
+                               </tbody>
+                            </table>
+                        </div>
+                    </div>
                         </div>
                     </div>
                     <!-- END Dynamic Table Full -->
@@ -235,33 +278,19 @@
                                     <div class="pull-t pull-r-l">
                                         <!-- Slick slider (.js-slider class is initialized in App() -> uiHelperSlick()) -->
                                         <!-- For more info and examples you can check out http://kenwheeler.github.io/slick/ -->
-                                        <div>
+                                       <div>
                                                 <table class="table remove-margin-b font-s13">
                                                     <tbody>
                                                         <tr>
-                                                            <td class="font-w600">学号：</td>
+                                                            <td class="font-w600">账号：</td>
                                                             
-                                                            <td class="font-w600 text-success text-right" style="width: 70px;">${user.getStuID()}</td>
+                                                            <td class="font-w600 text-success text-right" style="width: 70px;"><%=teacher.getTeacherID() %></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="font-w600">姓名：</td>
                                                             
-                                                            <td class="font-w600 text-success text-right">${user.getName()}</td>
+                                                            <td class="font-w600 text-success text-right"><%=teacher.getName() %></td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="font-w600">班级：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right">${user.getClassID()}
-                                                            
-															</td>
-                                                        </tr>
-                                                        
-                                                    
-                                                        
-                                                       
-                                                        
-                                                        
-                                                        
                                                     </tbody>
                                                 </table>
                                             </div>

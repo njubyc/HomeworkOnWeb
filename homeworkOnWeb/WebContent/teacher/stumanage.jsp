@@ -1,11 +1,17 @@
-
+<%@page import="com.chen.users.Class"%>
 <%@page import="org.apache.catalina.User"%>
 <%@page import="com.chen.users.Student"%>
 <%@page import="com.chen.jdbc.JdbcUtils"%>
+<%@page import="com.chen.users.Teacher"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-
+<jsp:useBean id="teacherDao" class="com.chen.dao.TeacherDao"/>
+<%
+Teacher teacher = (Teacher)request.getSession().getAttribute("user");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html class="no-focus">
 <head>
@@ -207,7 +213,7 @@
                            				 <!-- 按钮组-->
                    			
                         			<div class="btn-group-vertical">
-                        			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal1">导入学生信息</button>
+                        			<!--<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal1">导入学生信息</button>-->
                             			<!-- 弹出导入文件模态框 -->
                             			<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1Label" aria-hidden="true">
                             				<div class="modal-dialog">
@@ -230,33 +236,186 @@
       										</div>
 
       									</div>
-      									<!-- 结束导入 -->                            	                            	
-                            		<button type="button" class="btn btn-default" id="addstu">添加学生</button>
-                            		<button type="button" class="btn btn-default" id="delstu">删除学生</button>
+      									<!-- 结束导入 -->
+      									
+      									
+								<form name="form1" METHOD="POST" ACTION="/homeworkOnWeb/servlet/AddStudentFromFile" ENCTYPE="multipart/form-data">
+									<input name="file" type="FILE" id="file"size="10"><br> 
+									<input type="submit" value="导入学生信息">
+								</form>
+								
+								
+								
+							</div>
+                           			<div class="form-group form-horizontal">
+                           				<label for="stuname" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="stuName" placeholder="请输入名字">
+   									   </div>
+   									   <label for="stuid" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="stuID" placeholder="请输入学号">
+   									   </div>
+   									   <button type="button" class="btn btn-default" id="addstu" onclick="postAddDeleteStudent('stuName','stuID','/homeworkOnWeb/servlet/AddDeleteStudent',{action:'add'});">添加学生</button>
+                            		<button type="button" class="btn btn-default" id="delstu" onclick="postAddDeleteStudent('stuName','stuID','/homeworkOnWeb/servlet/AddDeleteStudent',{action:'delete'});">删除学生</button>
                            			</div>
                         		</div>
                         		
-                        		<div class="col-xs-4">
-                     	 			<table class="table table-bordered table-striped js-dataTable-full">
+                        		<div class="col-xs-3">
+                     	 			<table class="table table-bordered table-striped js-datatable-full">
                                			 <thead>
                                    			 <tr>
                                        			<th >学号</th>
                                        			<th >姓名</th>
+
                                      		 </tr>
 
                                 		</thead>
-                     	 				<tbody></tbody>
+                                		
+                     	 				<tbody>
+                     	 				                                     		 <!-- 表格内容 -->
+                                <% 
+                                		//Student student=(Student)request.getSession().getAttribute("student");
+                                    	//BusinessServiceImpl book =new BusinessServiceImpl();
+                                    	//List stuAll=book.findclass(student.getStudentid());
+                                    	//request.setAttribute("stuAll", stuAll);  
+                                  
+                                 List<Student> students =teacherDao.showAllStudents();
+                                 int i = 1;
+                                 for(Student student:students)
+                                 {
+                                	 
+                                 %>
+								  <tr>
+                                   
+
+                                        <td class="font-w600"><%=student.getStuID() %></td>
+                                        <td class="font-w600"><%=student.getName() %></td>
+
+                                        
+                                    </tr> 
+                                    <%
+                                    i++;
+                                 }
+                                 %>
+                     	 				</tbody>
                      				</table>
                     			</div>
+                    			
+                    			<div class="col-xs-2">
+                           				 <!-- 按钮组-->
+                   					<div class="form-group form-horizontal">
+                           				<label for="classname" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="classID" placeholder="请输入班级">
+   									   </div>
+   									   <label for="coursename" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="course" placeholder="请输入课程名">
+   									   </div>
+                           			</div>
+                           			
+                        			<div class="btn-group-vertical">
+                     	                            	
+                            		<button type="button" class="btn btn-default" id="addclass" onclick="postAddDeleteClass('classID','course','/homeworkOnWeb/servlet/AddDeleteClass',{action:'add'});">新建班级</button>
+                            		<button type="button" class="btn btn-default" id="delclass" onclick="postAddDeleteClass('classID','course','/homeworkOnWeb/servlet/AddDeleteClass',{action:'delete'});">删除班级</button>
+                            		<button type="button" class="btn btn-default" id="importstu">往班级导入学生</button>
+                            		<button type="button" class="btn btn-default" id="addstutoclass" onclick="postAddDeleteStudentToClass('classID','stuID','stuName','/homeworkOnWeb/servlet/AddDeleteStudentToClass',{action:'add'});">往班级添加学生</button>
+                            		<button type="button" class="btn btn-default" id="delstufromclass" onclick="postAddDeleteStudentToClass('classID','stuID','stuName','/homeworkOnWeb/servlet/AddDeleteStudentToClass',{action:'delete'});">从班级删除学生</button>
+                            
+                           			</div>
+                           			                           			
+                        		</div>
+                        		
+                        		<div class="col-xs-3">
+                     	 			<table class="table table-bordered table-striped js-datatable-full"  >
+                               			 <thead>
+                                   			 <tr>
+                                       			<th >班级列表</th>
+                                       			<th >教师姓名</th>
+                                       			<th >课程</th>
+                                       			<th >查看</th>
+                                     		 </tr>
+                                     	</thead>
+										<tbody>
+								 <%                                 		                                 
+                                 List<Class> classes =teacherDao.showClasses(teacher.getTeacherID());
+                                 int j = 1;
+                                 for(Class classD:classes)
+                                 {
+                                	 String herfID = "#class"+j;
+                                	 
+                                 %>
+								  <tr>
+                                   
+
+                                        <td class="font-w600"><%=classD.getClassID() %></td>
+                                        <td class="font-w600"><%=classD.getTeacherName() %></td>
+										<td class="font-w600"><%=classD.getCourse() %></td>
+										<td class="nav-tabs"><a href="<%=herfID %>" class="btn btn-default" data-toggle="tab">查看</a></td>
+                                        <!-- href="#id" -->
+                                    </tr> 
+                                    <%
+                                    j++;
+                                 }
+                                 %>
+										</tbody>
+
+                                	</table>
+                                </div>
+                                
+                                <!-- 按钮触发的班级成员列表 -->
+                                <div class="col-xs-2 tab-content" >
+                                	<!-- 循环这里开始，id -->
+                                	<%                                 		                                 
+          
+                                 int n = 1;
+                                 for(Class classD:classes)
+                                 {
+                                	 String herfID = "class"+n;
+                                	 
+                                 %>
+                                	<div class="tab-pane fade" id="<%=herfID %>">
+                     	 			<table class="table table-bordered table-striped js-datatable-full " >
+                               			 <thead>
+                                   			 <tr>
+                                       			<th >学生ID</th>
+                                       			<th >学生姓名</th>
+											
+                                     		 </tr>
+                                     		 </thead>
+                                     		 <%
+										List<Student> classStudents = teacherDao.showClassStudents(classD.getClassID());
+										for(Student student:classStudents)
+										{
+										%>
+										<tbody >
+										
+											<tr >
+												<td><%=student.getStuID() %></td>
+												<td><%=student.getName() %></td>
+												<!-- td里面各班学生学号 -->
+											</tr>
+										
+										</tbody>
+										<%
+										}
+										%>
+                                		
+                                	</table>
+                                	</div>
+                                	<%
+										
+                                    n++;
+                                 }
+                                 %>
+                                </div>
+
 
                      	</div>
                      	 
                      	
-                     	 
-                        <div class="col-xs-6">
-
-
-                        </div>
+                     	
                     </div>
                     
                 </div>
@@ -280,73 +439,99 @@
 
         
  
+<script type="text/javascript">  
 
-<!-- 
-<script type="text/javascript">
-	var table;
-    
-            /**
-     *编辑方法
-     **/
-    function edit(username,name,email,type) {
-        console.log(name);
-        editFlag = true;
-        $("#myModalLabel").text("修改");
-        $("#username").val(username).attr("disabled",true);
-        $("#name").val(name);
-        $("#email").val(email);
-        $("#type").val(type);
-        
-        $("#myModal").modal("show");
+function postAddDeleteStudent(ID1,ID2,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-    function ajax(obj) {
-        var url ="" ;
-        if(editFlag){
-            url = "edit.jsp";
-        }
-        $.ajax({
-            url:url ,
-            data: {
-                "name": obj.name,
-                "position": obj.position,
-                "salary": obj.salary,
-                "start_date": obj.start_date
-                
-            }, success: function (data) {
-                table.ajax.reload();
-                
-                
-                console.log("结果" + data);
-            }
-        });
+    var opt = document.createElement("textarea");
+    opt.name = "stuName";        
+    opt.value = document.getElementById(ID1).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);     
+    var opt = document.createElement("textarea");
+    opt.name = "stuID";        
+    opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+    temp.submit();        
+    return temp;        
+}
+
+function postAddDeleteClass(ID1,ID2,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-     /**
-     * 删除数据
-     * @param name
-     */
-    function del(username,name) {
-        $.ajax({
-            url: "del.jsp",
-            data: {
-            	"username":username,
-                "name": name
-            },
-            success: function (data) {
-                table.ajax.reload();
-                
-               
-            }
-            
-            
-            
-           
-        });
-        alert("删除成功！");
-        table.ajax.reload();
-        window.navigate("index.jsp"); 
-         
+    var opt = document.createElement("textarea");
+    opt.name = "classID";        
+    opt.value = document.getElementById(ID1).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);     
+    var opt = document.createElement("textarea");
+    opt.name = "course";        
+    opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+    temp.submit();        
+    return temp;        
+}
+function postAddDeleteStudentToClass(ID1,ID2,ID3,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-  -->       
+    var opt = document.createElement("textarea");
+    opt.name = "classID";        
+    opt.value = document.getElementById(ID1).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);     
+    var opt = document.createElement("textarea");
+    opt.name = "stuID";        
+    opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+    var opt = document.createElement("textarea");
+    opt.name = "stuName";        
+    opt.value = document.getElementById(ID3).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);
+    temp.submit();        
+    return temp;        
+}
+
+ </script> 
+
 </script>
 
         <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->

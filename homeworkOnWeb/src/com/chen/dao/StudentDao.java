@@ -35,7 +35,6 @@ public class StudentDao {
 				student.setName(rs.getString("name"));
 				student.setStuID(rs.getString("stuID"));
 				student.setPassword(rs.getString("password"));
-				student.setClassID(rs.getString("classID"));
 				jdbc.releace(conn, ps, rs);
 			}else{
 				student = null;
@@ -103,7 +102,30 @@ public class StudentDao {
 		}
 		return homework;
 	}
-	
+public Homework seeOneHomework(String stuID) {
+		Homework homework = new Homework();
+		JdbcUtils jdbc = new JdbcUtils();
+		try {
+			Connection conn = jdbc.getConection();
+			if(conn==null){
+				System.out.println("数据库不存在");
+			}
+			String sql = "select * from task_answerStu where stuID=? ";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, stuID);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				
+				homework = setHomework(rs.getString("homeworkID"));
+				homework.setTskState(rs.getString("tskState"));
+			}
+			jdbc.releace(conn, ps, rs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return homework;
+	}
 	public List<Homework> seeAllHomework() {
 		
 		List<Homework> homeworks = new ArrayList<Homework>();

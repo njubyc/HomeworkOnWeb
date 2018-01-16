@@ -1,11 +1,20 @@
-
+<%@page import="com.chen.users.Class"%>
+<%@page import="com.chen.users.Question"%>
 <%@page import="org.apache.catalina.User"%>
 <%@page import="com.chen.users.Student"%>
 <%@page import="com.chen.jdbc.JdbcUtils"%>
+<%@page import="com.chen.users.Teacher"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-
+    
+<jsp:useBean id="teacherDao" class="com.chen.dao.TeacherDao"/>
+<%
+Teacher teacher = (Teacher)request.getSession().getAttribute("user");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html class="no-focus">
 <head>
@@ -18,7 +27,10 @@
         <meta name="author" content="nju">
         <meta name="robots" content="南京大学">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
-
+		<!-- 公式编辑器 -->
+		
+		<script type="text/javascript" src="jmeditor/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="jmeditor/JMEditor.js"></script>
         <!-- Icons -->
         <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
         <link rel="shortcut icon" href="assets/img/favicons/favicon.png">
@@ -200,108 +212,102 @@
 
                 <!-- Page Content -->
                 <div class="content">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <!-- Main Dashboard Chart -->
-                            <!-- Dynamic Table Full -->
-                    <div class="block">
-                        <div class="block-header">
-                            <h3 class="block-title">我的作业 </h3>
-                        </div>
-                        <div class="block-content">
-                            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
-                            <table class="table table-bordered table-striped js-dataTable-full">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center"></th>
-                                        <th>课程</th>
-                                        <th class="hidden-xs">作业</th>
-                                        <th class="hidden-xs">截止时间</th>
-                                        <th class="hidden-xs">提交状态</th>
-                                        
-                                    </tr>
+                	<div class="block">                       
+                		<div class="block-content">
+                   		 	<div class="row">
+ 
+                        
+                        		<div class="col-lg-4">                            
+                    				<table class="table table-bordered table-striped js-datatable-full">
+                               			 <thead>
+                                   			 <tr>
+                                       			<th >题目ID</th>
+                                       			<th >所属课程</th>
+												<th >所属章节</th>
+												<th >查看</th>
+                                     		 </tr>
 
-                                </thead>
+                                		</thead>
+                                		
+                     	 				<tbody>
+                     	 				                                     		
+                                <% 
                                 
-                                <tbody>
-                                 
+                                  
+                                 List<Question> questions =teacherDao.showQuestions();
+                                 int i = 1;
+                                 for(Question question:questions)
+                                 {
+                                	 String herfID = "#class"+i;
+                                 %>
 								  <tr>
-                                   
-                                        <td class="text-center">1</td>
-                                        <td class="font-w600">${student.className()}</td>
-                                        <td class="font-w600">${student.homeworkName()}</td>
-                                        <td class="hidden-xs">${student.deadline()}</td>
-                                        <td class="hidden-xs">${student.state()}</td>
-                                        
+                                        <td class="font-w600"><%=question.getTskID() %></td>
+                                        <td class="font-w600"><%=question.getCourse() %></td>
+                                        <td class="font-w600"><%=question.getChapter() %></td>
+										<td class="nav-tabs"><a href="<%=herfID %>"  class="btn btn-default"data-toggle="tab">查看</a></td>
                                         
                                     </tr> 
-                               </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- END Dynamic Table Full -->
-                            <!-- END Main Dashboard Chart -->
-                        </div>
-                        <div class="col-lg-4">
-                            <!-- 个人信息 -->
-                            <div class="block">
-                                <div class="block-header">
-                                    <ul class="block-options">
-                                        <li>
-                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                                        </li>
-                                    </ul>
-                                    <h3 class="block-title">个人信息</h3>
-                                </div>
-                               <!--  <div class="block-content bg-gray-lighter">
-                                    <div class="row items-push">
+                                    <%
+                                    i++;
+                                 }
+                                 %>
+                     	 				</tbody>
+                     				</table>
 
-                                    </div>
-                                </div> -->
-                                <div class="block-content">
-                                    <div class="pull-t pull-r-l">
-                                        <!-- Slick slider (.js-slider class is initialized in App() -> uiHelperSlick()) -->
-                                        <!-- For more info and examples you can check out http://kenwheeler.github.io/slick/ -->
-                                        <div>
-                                                <table class="table remove-margin-b font-s13">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="font-w600">学号：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right" style="width: 70px;">${user.getStuID()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="font-w600">姓名：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right">${user.getName()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="font-w600">班级：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right">${user.getClassID()}
-                                                            
-															</td>
-                                                        </tr>
-                                                        
-                                                    
-                                                        
-                                                       
-                                                        
-                                                        
-                                                        
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        <!-- END Slick slider -->
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 个人信息 -->
-                            <!-- END Latest Sales Widget -->
-                        </div>
-                    </div>
-                    
+
+                        		</div>
+                        		
+                        		                       		<div class="col-lg-2">                            
+                    		
+									<form id="formarea">
+                           				<div class="form-group form-horizontal">
+                           					<label for="coursename" class=" control-label"></label>
+      										<div >
+        										 <input type="text" class="form-control" id="course" placeholder="请输入所属课程">
+   									   		</div>
+   									  		 <label for="chapterid" class=" control-label"></label>
+      										<div >
+        									 	<input type="text" class="form-control" id="chapter" placeholder="请输入所属章节">
+   									  		</div>  									   	
+                           				</div>
+                           				<button type="submit" class="btn btn-default" id="addquestions" onclick="postAddQuestion('course','chapter','/homeworkOnWeb/servlet/AddQuestion',{tskID:'<%=i %>'});">新建题目</button>
+                            			
+                           			</form>
+                       		 
+                       			 </div>
+                       			 
+                        		<div class="col-xs-2 tab-content" >
+                        <% 
+
+                                 int j = 1;
+                                 for(Question question:questions)
+                                 {
+                                	 String herfID = "class"+j;
+                                	 String questionID = "question"+j;
+                                 %>
+                       			<div class="tab-pane fade" id="<%=herfID %>">
+									<div  contentEditable="true" class="editDemo" id="<%=questionID%>"><%=question.getTskDetail() %></div>
+										<form role="form" class="tab-pane fade in active" >
+ 										<div class="form-group" class="tab-pane fade in active" >									
+ 										</div>
+ 										<button type="submit" class="btn btn-default" id="subquestions" onclick="post('<%=questionID%>','/homeworkOnWeb/servlet/updateQuestion',{tskID:'<%=j%>'});">提交题目</button>                                                                                                                                                          
+                       					</form>	
+                       					
+                       					
+									</div>
+									
+                                     <%
+                                    j++;
+                                 }
+                                 %>    
+                                 </div>                                         
+                        		</div>
+                        		 
+							</div>
+                   		</div>
+                   </div>                    
                 </div>
+                
                 <!-- END Page Content -->
             </main>
             <!-- END Main Container -->
@@ -323,73 +329,62 @@
         
  
 
-<!-- 
-<script type="text/javascript">
-	var table;
-    
-            /**
-     *编辑方法
-     **/
-    function edit(username,name,email,type) {
-        console.log(name);
-        editFlag = true;
-        $("#myModalLabel").text("修改");
-        $("#username").val(username).attr("disabled",true);
-        $("#name").val(name);
-        $("#email").val(email);
-        $("#type").val(type);
-        
-        $("#myModal").modal("show");
+
+<script type="text/javascript">  
+
+function postAddQuestion(ID1,ID2,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-    function ajax(obj) {
-        var url ="" ;
-        if(editFlag){
-            url = "edit.jsp";
-        }
-        $.ajax({
-            url:url ,
-            data: {
-                "name": obj.name,
-                "position": obj.position,
-                "salary": obj.salary,
-                "start_date": obj.start_date
-                
-            }, success: function (data) {
-                table.ajax.reload();
-                
-                
-                console.log("结果" + data);
-            }
-        });
+    var opt = document.createElement("textarea");
+    opt.name = "course";        
+    opt.value = document.getElementById(ID1).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);     
+    var opt = document.createElement("textarea");
+    opt.name = "chapter";        
+    opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+    temp.submit();        
+    return temp;        
+}
+function post(ID,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";        
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-     /**
-     * 删除数据
-     * @param name
-     */
-    function del(username,name) {
-        $.ajax({
-            url: "del.jsp",
-            data: {
-            	"username":username,
-                "name": name
-            },
-            success: function (data) {
-                table.ajax.reload();
-                
-               
-            }
-            
-            
-            
-           
-        });
-        alert("删除成功！");
-        table.ajax.reload();
-        window.navigate("index.jsp"); 
-         
-    }
-  -->       
-</script>
+    var opt = document.createElement("textarea");
+    opt.name = "tskDetail";        
+    opt.value = document.getElementById(ID).innerHTML;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);        
+    temp.submit();        
+    return temp;        
+}
+
+
+
+
+ </script> 
 
         <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
         <script src="assets/js/core/jquery.min.js"></script>

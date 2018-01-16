@@ -1,122 +1,47 @@
 package com.chen.users;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import com.chen.jdbc.JdbcUtils;
+import java.util.List;
 
 public class AssTeacher {
 
 	private String assTeacherID;
 	private String name;
 	private String password;
-	
-	public void modifyPassword(String newPassword) {
-		try {
-			JdbcUtils jdbc = new JdbcUtils();
-			Connection conn = jdbc.getConection();
-			String sql = "update assteacher set password=? where assteacherID=?";
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, newPassword);
-			ps.setString(2, this.getAssTeacherID());
-			ps.executeUpdate();
-			ps.close();
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private List<String> permission;
+	public List<String> getPermission() {
+		return permission;
 	}
-	
-	public void addStudent(String stuID,String stuName,String classID) {
-		try {
-			JdbcUtils jdbc = new JdbcUtils();
-			Connection conn = jdbc.getConection();
-			String sql = "insert into class_student(classID,stuID,stuName) values(?,?,?)";/////待修改///////////////
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, classID);
-			ps.setString(2, stuID);
-			ps.setString(3, stuName);
-			ps.executeUpdate();
-			ps.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void setPermission(List<String> permission) {
+		this.permission = permission;
 	}
-	
-	
-	public void deleteStudent(String stuID,String classID) {
-		try {
-			JdbcUtils jdbc = new JdbcUtils();
-			Connection conn = jdbc.getConection();
-			String sql = "delete from class_student where stuID=? and classID=?";/////待修改///////////////
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, stuID);
-			ps.setString(2, classID);
-			ps.executeUpdate();
-			ps.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private int stuManState;
+	private int addQuestion;
+	private int addHomework;
+	private int correctHomework;
+	public int getStuManState() {
+		return stuManState;
 	}
-	
-	
-	public void deleteAssTeacher(String classID,String assTeacherID) {
-		try {
-			JdbcUtils jdbc = new JdbcUtils();
-			Connection conn = jdbc.getConection();
-			String sql = "delete from class_assteacher where assTeacherID=? and classID=?";/////待修改///////////////
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(2, classID);
-			ps.setString(1, assTeacherID);
-			ps.executeUpdate();
-			ps.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void setStuManState(int stuManState) {
+		this.stuManState = stuManState;
 	}
-	
-	public void addGrade(String classID,String stuID,String homeworkTitle,String grade) {
-		try {
-			JdbcUtils jdbc = new JdbcUtils();
-			Connection conn = jdbc.getConection();
-			String sql = "insert into stugrade(classID,stuID,homeworkTitle,Grade) values(?,?,?,?)";/////待修改///////////////
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, classID);
-			ps.setString(2, stuID);
-			ps.setString(3, homeworkTitle);
-			ps.setString(4, grade);
-			ps.executeUpdate();
-			ps.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public int getAddQuestion() {
+		return addQuestion;
 	}
-	
-	public void submitGrade(String classID,String stuID,String homeworkTitle,String grade) {
-		try {
-			JdbcUtils jdbc = new JdbcUtils();
-			Connection conn = jdbc.getConection();
-			String sql = "update stugrade set subState='1', Grade=? where stuID=? and homeworkTitle=? and classID=?";/////待修改///////////////
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, grade);
-			ps.setString(2, stuID);
-			ps.setString(3, homeworkTitle);
-			ps.setString(4, classID);
-			ps.executeUpdate();
-			ps.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void setAddQuestion(int addQuestion) {
+		this.addQuestion = addQuestion;
 	}
-	
-	
+	public int getAddHomework() {
+		return addHomework;
+	}
+	public void setAddHomework(int addHomework) {
+		this.addHomework = addHomework;
+	}
+	public int getCorrectHomework() {
+		return correctHomework;
+	}
+	public void setCorrectHomework(int correctHomework) {
+		this.correctHomework = correctHomework;
+	}
 	public String getName() {
 		return name;
 	}

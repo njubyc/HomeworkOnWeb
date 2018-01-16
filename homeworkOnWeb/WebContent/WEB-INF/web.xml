@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.4">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
   <jsp-config>
     <taglib>
       <taglib-uri>http://java.sun.com/jstl/fmt</taglib-uri>
@@ -49,6 +49,102 @@
   <servlet-mapping>
     <servlet-name>SubmitHomework</servlet-name>
     <url-pattern>/servlet/SubmitHomework</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeleteAssTeacher</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeleteAssTeacher</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeleteAssTeacher</servlet-name>
+    <url-pattern>/servlet/AddDeleteAssTeacher</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeleteAssTeacherToClass</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeleteAssTeacherToClass</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeleteAssTeacherToClass</servlet-name>
+    <url-pattern>/servlet/AddDeleteAssTeacherToClass</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeleteClass</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeleteClass</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeleteClass</servlet-name>
+    <url-pattern>/servlet/AddDeleteClass</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeleteQuestionToHomework</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeleteQuestionToHomework</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeleteQuestionToHomework</servlet-name>
+    <url-pattern>/servlet/AddDeleteQuestionToHomework</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeleteStudent</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeleteStudent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeleteStudent</servlet-name>
+    <url-pattern>/servlet/AddDeleteStudent</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeleteStudentToClass</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeleteStudentToClass</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeleteStudentToClass</servlet-name>
+    <url-pattern>/servlet/AddDeleteStudentToClass</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddGrade</servlet-name>
+    <servlet-class>com.chen.servlet.AddGrade</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddGrade</servlet-name>
+    <url-pattern>/servlet/AddGrade</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddHomework</servlet-name>
+    <servlet-class>com.chen.servlet.AddHomework</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddHomework</servlet-name>
+    <url-pattern>/servlet/AddHomework</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddQuestion</servlet-name>
+    <servlet-class>com.chen.servlet.AddQuestion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddQuestion</servlet-name>
+    <url-pattern>/servlet/AddQuestion</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>updateQuestion</servlet-name>
+    <servlet-class>com.chen.servlet.updateQuestion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>updateQuestion</servlet-name>
+    <url-pattern>/servlet/updateQuestion</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddStudentFromFile</servlet-name>
+    <servlet-class>com.chen.servlet.AddStudentFromFile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddStudentFromFile</servlet-name>
+    <url-pattern>/servlet/AddStudentFromFile</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddDeletePermission</servlet-name>
+    <servlet-class>com.chen.servlet.AddDeletePermission</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddDeletePermission</servlet-name>
+    <url-pattern>/servlet/AddDeletePermission</url-pattern>
   </servlet-mapping>
   <session-config>
     <session-timeout>0</session-timeout>

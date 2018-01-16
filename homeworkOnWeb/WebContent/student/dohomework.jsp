@@ -19,6 +19,10 @@ Student student = (Student)request.getSession().getAttribute("user");
 <head>
 
         <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<link href="style/default.css" rel="stylesheet" media="screen" type="text/css" />
+<script type="text/javascript" src="jmeditor/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="jmeditor/JMEditor.js"></script>
 
         <title>南京大学作业提交系统</title>
 
@@ -281,7 +285,7 @@ function post(ID,URL, PARAMS) {
     }
     var opt = document.createElement("textarea");
     opt.name = "tskStuAnswer";        
-    opt.value = document.getElementById(ID).value;        
+    opt.value = document.getElementById(ID).innerHTML;     
     // alert(opt.name)        
     temp.appendChild(opt);
     document.body.appendChild(temp);        
@@ -313,14 +317,11 @@ function post(ID,URL, PARAMS) {
 								<p><%=question.getTskDetail() %></p>
 								 	<form role="form" class="tab-pane fade in active" >
  									<div class="form-group" class="tab-pane fade in active" >
-
- 										<textarea class="form-control" id="<%=answerareaID%>"  placeholder="在此输入答案"  rows="20">
- 								        <%=question.getTskStuAnswer() %>
- 										</textarea>
+ 									<div id="<%=answerareaID%>" contentEditable="true" class="editDemo"><%=question.getTskStuAnswer() %></div>
+ 										<!--   <textarea class="form-control" id="<%=answerareaID%>"  placeholder="在此输入答案"  rows="20"><%=question.getTskStuAnswer() %></textarea>-->
  										<%
  										if(question.getTskState().equals("已提交"))
  										{
- 											i++;
  											%>
  									</div>                                                                                                                                                          
                        				</form>	

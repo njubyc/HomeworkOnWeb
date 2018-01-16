@@ -17,7 +17,7 @@ if(teacherDao.teacherLogin(user)){
 	out.print("教师登录成功<br>");
 	out.print("学号："+userTeacher.getTeacherID()+"<br>");
 	out.print("姓名："+userTeacher.getName()+"<br>");
-	session.setAttribute("User", userTeacher);
+	session.setAttribute("user", userTeacher);
 	session.setAttribute("identity", "teacher");
 	response.sendRedirect(request.getContextPath()+"/teacher/index.jsp");
 }else{

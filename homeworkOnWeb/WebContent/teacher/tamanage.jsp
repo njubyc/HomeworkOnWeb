@@ -1,11 +1,19 @@
-
+<%@page import="com.chen.users.AssTeacher"%>
+<%@page import="com.chen.users.Class"%>
 <%@page import="org.apache.catalina.User"%>
 <%@page import="com.chen.users.Student"%>
 <%@page import="com.chen.jdbc.JdbcUtils"%>
+<%@page import="com.chen.users.Teacher"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-
+<jsp:useBean id="teacherDao" class="com.chen.dao.TeacherDao"/>
+<jsp:useBean id="assteacherDao" class="com.chen.dao.AssTeacherDao"/>
+<%
+Teacher teacher = (Teacher)request.getSession().getAttribute("user");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html class="no-focus">
 <head>
@@ -200,105 +208,255 @@
 
                 <!-- Page Content -->
                 <div class="content">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <!-- Main Dashboard Chart -->
-                            <!-- Dynamic Table Full -->
-                    <div class="block">
-                        <div class="block-header">
-                            <h3 class="block-title">我的作业 </h3>
-                        </div>
+                    <div class="block">                   
                         <div class="block-content">
-                            <!-- DataTables init on table by adding .js-dataTable-full class, functionality initialized in js/pages/base_tables_datatables.js -->
-                            <table class="table table-bordered table-striped js-dataTable-full">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center"></th>
-                                        <th>课程</th>
-                                        <th class="hidden-xs">作业</th>
-                                        <th class="hidden-xs">截止时间</th>
-                                        <th class="hidden-xs">提交状态</th>
-                                        
-                                    </tr>
+                        	<div class="row">
+                      			 <div class="col-xs-2">
+                           				 <!-- 按钮组-->
+                   			
+                        			
+                           			<div class="form-group form-horizontal">
+                           				<label for="taName" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="taName" placeholder="请输入助教姓名">
+   									   </div>
+   									   <label for="taID" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="taID" placeholder="请输入助教ID">
+   									   </div>
+   									   <button type="button" class="btn btn-default" id="addta" onclick="postAddDeleteAssTeacher('taName','taID','/homeworkOnWeb/servlet/AddDeleteAssTeacher',{action:'add'});">添加助教</button>
+                            			<button type="button" class="btn btn-default" id="delta" onclick="postAddDeleteAssTeacher('taName','taID','/homeworkOnWeb/servlet/AddDeleteAssTeacher',{action:'delete'});">删除助教</button>
+                           			</div>
+                        		</div>
+                        		
+                        		<div class="col-xs-3">
+                     	 			<table class="table table-bordered table-striped js-datatable-full">
+                               			 <thead>
+                                   			 <tr>
+                                       			<th >助教ID</th>
+                                       			<th >助教姓名</th>
+                                       			<th >勾选</th>
 
-                                </thead>
-                                
-                                <tbody>
-                                 
+                                     		 </tr>
+
+                                		</thead>
+                                		
+                     	 				<tbody>
+                     	 				                                     		 <!-- 表格内容 -->
+                                <% 
+                                		
+                                  
+                                 List<AssTeacher> assteachers =teacherDao.showAllAssTeachers();
+                                 int i = 1;
+                                 for(AssTeacher assTeacher:assteachers)
+                                 {
+                                	 
+                                 %>
 								  <tr>
                                    
-                                        <td class="text-center">1</td>
-                                        <td class="font-w600">${student.className()}</td>
-                                        <td class="font-w600">${student.homeworkName()}</td>
-                                        <td class="hidden-xs">${student.deadline()}</td>
-                                        <td class="hidden-xs">${student.state()}</td>
-                                        
+
+                                        <td class="font-w600"><%=assTeacher.getAssTeacherID() %></td>
+                                        <td class="font-w600"><%=assTeacher.getName() %></td>
+                                        <td><input type="radio"  name ="assteacher" value="<%=assTeacher.getAssTeacherID() %>">选中</td>
+
                                         
                                     </tr> 
-                               </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- END Dynamic Table Full -->
-                            <!-- END Main Dashboard Chart -->
-                        </div>
-                        <div class="col-lg-4">
-                            <!-- 个人信息 -->
-                            <div class="block">
-                                <div class="block-header">
-                                    <ul class="block-options">
-                                        <li>
-                                            <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
-                                        </li>
-                                    </ul>
-                                    <h3 class="block-title">个人信息</h3>
-                                </div>
-                               <!--  <div class="block-content bg-gray-lighter">
-                                    <div class="row items-push">
+                                    <%
+                                    i++;
+                                 }
+                                 %>
+                     	 				</tbody>
+                     				</table>
+                    			</div>
+                    			
+                    			<div class="col-xs-2">
+                           				 <!-- 按钮组-->
+                   					<div class="form-group form-horizontal">
+                           				<label for="classname" class=" control-label"></label>
+      									<div >
+        									 <input type="text" class="form-control" id="classID" placeholder="请输入班级">
+   									   </div>
+   									   
+                           			</div>
+                           			
+                        			<div class="btn-group-vertical">
+                     	                            	
+                            		
+                            		<button type="button" class="btn btn-default" id="addstutoclass" onclick="postAddDeleteAssTeacherToClass('class','assteacher','/homeworkOnWeb/servlet/AddDeleteAssTeacherToClass',{action:'add'});">往班级添加助教</button>
+                            		<button type="button" class="btn btn-default" id="delstufromclass" onclick="postAddDeleteAssTeacherToClass('class','assteacher','/homeworkOnWeb/servlet/AddDeleteAssTeacherToClass',{action:'delete'});">从班级删除助教</button>
+                            		<button type="button" class="btn btn-default" id="addpermissions" onclick="postAddDeleteAssTeacherPermission('classAssteacher','permissions','class','/homeworkOnWeb/servlet/AddDeletePermission',{action:'add'});">添加权限</button>
+                            		<button type="button" class="btn btn-default" id="delpermissions" onclick="postAddDeleteAssTeacherPermission('classAssteacher','permissions','class','/homeworkOnWeb/servlet/AddDeletePermission',{action:'delete'});">删除权限</button>
+                           			</div>
+                           			                           			
+                        		</div>
+                        		
+                        		<div class="col-xs-3">
+                     	 			<table class="table table-bordered table-striped js-datatable-full"  >
+                               			 <thead>
+                                   			 <tr>
+                                   			 <th >选中</th>
+                                       			<th >班级列表</th>
+                                       			<th >教师姓名</th>
+                                       			<th >课程</th>
+                                       			<th >查看</th>
+                                     		 </tr>
+                                     	</thead>
+										<tbody>
+								 <%                                 		                                 
+                                 List<Class> classes =teacherDao.showClasses(teacher.getTeacherID());
+                                 int j = 1;
+                                 for(Class classD:classes)
+                                 {
+                                	 String herfID = "#class"+j;
+                                	 
+                                 %>
+								  <tr>
+                                   
+                                        <td><input type="radio"  name ="class" value="<%=classD.getClassID() %>">选中</td>
 
-                                    </div>
-                                </div> -->
-                                <div class="block-content">
-                                    <div class="pull-t pull-r-l">
-                                        <!-- Slick slider (.js-slider class is initialized in App() -> uiHelperSlick()) -->
-                                        <!-- For more info and examples you can check out http://kenwheeler.github.io/slick/ -->
-                                        <div>
-                                                <table class="table remove-margin-b font-s13">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="font-w600">学号：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right" style="width: 70px;">${user.getStuID()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="font-w600">姓名：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right">${user.getName()}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="font-w600">班级：</td>
-                                                            
-                                                            <td class="font-w600 text-success text-right">${user.getClassID()}
-                                                            
-															</td>
-                                                        </tr>
-                                                        
-                                                    
-                                                        
-                                                       
-                                                        
-                                                        
-                                                        
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        <!-- END Slick slider -->
-                                    </div>
+                                        <td class="font-w600"><%=classD.getClassID() %></td>
+                                        <td class="font-w600"><%=classD.getTeacherName() %></td>
+										<td class="font-w600"><%=classD.getCourse() %></td>
+										<td class="nav-tabs"><a href="<%=herfID %>" class="btn btn-default" data-toggle="tab">查看</a></td>
+                                        <!-- href="#id" -->
+                                    </tr> 
+                                    <%
+                                    j++;
+                                 }
+                                 %>
+										</tbody>
+
+                                	</table>
+                                	<table class="table table-bordered table-striped js-datatable-full">
+                                	<thead>
+                                   			 <tr>                                  			
+                                       			<th >选中</th>
+                                       			<th >可选权限</th>
+                                     		 </tr>
+                                     	</thead>
+										<tbody>
+										<tr>
+										<td><input type="radio"  name ="permissions" value="stuManState"></td>
+                                        <td class="font-w600">学生管理</td>
+                                         </tr> 
+                                         <tr>
+										<td><input type="radio"  name ="permissions" value="addQuestion"></td>
+                                        <td class="font-w600">添加题目</td>
+                                         </tr> 
+                                         <tr>
+										<td><input type="radio"  name ="permissions" value="addHomework"></td>
+                                        <td class="font-w600">添加作业</td>
+                                         </tr> 
+                                         <tr>
+										<td><input type="radio"  name ="permissions" value="correctHomework"></td>
+                                        <td class="font-w600">批改作业</td>
+                                         </tr> 
+                                         
+										</tbody>
+                                	</table>
                                 </div>
-                            </div>
-                            <!-- 个人信息 -->
-                            <!-- END Latest Sales Widget -->
-                        </div>
+                                
+                                <!-- 按钮触发的班级成员列表 -->
+                                <div class="col-xs-2 " >
+                                	<!-- 循环这里开始，id -->
+                                	<div class="tab-content">
+                                	<%                                 		                                 
+          
+                                 int n = 1;
+                                 for(Class classD:classes)
+                                 {
+                                	 String herfID = "class"+n;
+                                	 
+                                 %>
+                                	<div class="tab-pane fade" id="<%=herfID %>">
+                     	 			<table class="table table-bordered table-striped js-datatable-full " id="tatable">
+                               			 <thead>
+                                   			 <tr>
+                                       			<th >选中</th>
+                                       			<th >助教姓名</th>
+											
+                                     		 </tr>
+                                     		 </thead>
+                                     		 <%
+                                     		List<AssTeacher> assteacherOfClass =teacherDao.showAssTeachers(classD.getClassID());
+                                          
+                                             for(AssTeacher assTeacher:assteacherOfClass)
+										{
+										%>
+										<tbody >
+										
+											<tr >
+												<td><input type="radio"  name ="classAssteacher" value="<%=assTeacher.getAssTeacherID() %>">选中</td>
+												
+												<td><a href="#1<%=classD.getClassID()+assTeacher.getAssTeacherID() %>" data-toggle="tab"><%=assTeacher.getName() %></a></td>
+												<!-- td里面各班学生学号 -->
+											</tr>
+										
+										</tbody>
+										<%
+										}
+										%>
+                                		
+                                	</table>
+                                	</div>
+                                	<%
+										
+                                    n++;
+                                 }
+                                 %>
+                                 </div>
+                                 
+                                 <div class="tab-content"> 
+                                  <%                                 		                                 
+          
+
+                                 for(Class classD:classes)
+                                 {
+                                	 List<AssTeacher> assteacherOfClass =teacherDao.showAssTeachers(classD.getClassID());
+                                     for(AssTeacher assTeacher:assteacherOfClass)
+										{
+                                	 
+                                 %>
+                                	<div class="tab-pane fade" id="1<%=classD.getClassID()+assTeacher.getAssTeacherID() %>">
+                     	 			<table class="table table-bordered table-striped js-datatable-full ">
+                               			 <thead>
+                                   			 <tr>
+                                       			<th >当前权限</th>
+                                     		 </tr>
+                                     		 </thead>
+                                     		 <%
+                                     		AssTeacher assTeacherPermission = assteacherDao.getPermission(assTeacher.getAssTeacherID(),classD.getClassID());
+                                     		 List<String> permission = assTeacherPermission.getPermission();
+                                     		 for(String p:permission)
+										{
+										%>
+										<tbody >
+										
+											<tr >																								
+												<td><%=p %></td>
+
+											</tr>
+										
+										</tbody>
+										<%
+										}
+										
+										%>
+                                		
+                                	</table>
+                                	</div>
+                                	<%
+										}	
+                                   
+                                 }
+                                 %>
+                                </div>
+								</div>
+
+                     	</div>
+                     	 
+                     	
+                     	
                     </div>
                     
                 </div>
@@ -322,73 +480,155 @@
 
         
  
+<script type="text/javascript">  
 
-<!-- 
-<script type="text/javascript">
-	var table;
-    
-            /**
-     *编辑方法
-     **/
-    function edit(username,name,email,type) {
-        console.log(name);
-        editFlag = true;
-        $("#myModalLabel").text("修改");
-        $("#username").val(username).attr("disabled",true);
-        $("#name").val(name);
-        $("#email").val(email);
-        $("#type").val(type);
-        
-        $("#myModal").modal("show");
+function postAddDeleteAssTeacher(ID1,ID2,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-    function ajax(obj) {
-        var url ="" ;
-        if(editFlag){
-            url = "edit.jsp";
-        }
-        $.ajax({
-            url:url ,
-            data: {
-                "name": obj.name,
-                "position": obj.position,
-                "salary": obj.salary,
-                "start_date": obj.start_date
-                
-            }, success: function (data) {
-                table.ajax.reload();
-                
-                
-                console.log("结果" + data);
-            }
-        });
+    var opt = document.createElement("textarea");
+    opt.name = "assTeacherName";        
+    opt.value = document.getElementById(ID1).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);     
+    var opt = document.createElement("textarea");
+    opt.name = "assTeacherID";        
+    opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+    temp.submit();        
+    return temp;        
+}
+
+function postAddDeleteAssTeacherToClass(ID1,ID2,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-     /**
-     * 删除数据
-     * @param name
-     */
-    function del(username,name) {
-        $.ajax({
-            url: "del.jsp",
-            data: {
-            	"username":username,
-                "name": name
-            },
-            success: function (data) {
-                table.ajax.reload();
-                
-               
-            }
-            
-            
-            
-           
-        });
-        alert("删除成功！");
-        table.ajax.reload();
-        window.navigate("index.jsp"); 
-         
+    var opt = document.createElement("textarea");
+    opt.name = "classID";
+    var radio=document.getElementsByName(ID1);
+    var selectvalue=null;   //  selectvalue为radio中选中的值
+   for(var k=0;k<radio.length;k++){
+          if(radio[k].checked==true) {
+                   selectvalue=radio[k].value;
+                   break;
+         }
+  }
+    opt.value = selectvalue;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);    
+    var radio2=document.getElementsByName(ID2);
+    var selectvalue1=null;   //  selectvalue为radio中选中的值
+   for(var k=0;k<radio2.length;k++){
+          if(radio2[k].checked==true) {
+                   selectvalue1=radio2[k].value;
+                   break;
+         }
+  }
+    var opt = document.createElement("textarea");
+    opt.name = "assTeacherID";       
+    opt.value = selectvalue1;
+    //opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+  
+    temp.submit();        
+    return temp;        
+}
+function postAddDeleteAssTeacherPermission(ID1,ID2,ID3,URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";     
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        // alert(opt.name)        
+        temp.appendChild(opt);        
     }
-  -->       
+    var opt = document.createElement("textarea");
+    opt.name = "assTeacherID";
+    var radio=document.getElementsByName(ID1);
+    var selectvalue=null;   //  selectvalue为radio中选中的值
+   for(var k=0;k<radio.length;k++){
+          if(radio[k].checked==true) {
+                   selectvalue=radio[k].value;
+                   break;
+         }
+  }
+    opt.value = selectvalue;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);    
+    var radio2=document.getElementsByName(ID2);
+    var selectvalue1=null;   //  selectvalue为radio中选中的值
+   for(var k=0;k<radio2.length;k++){
+          if(radio2[k].checked==true) {
+                   selectvalue1=radio2[k].value;
+                   break;
+         }
+  }
+    var opt = document.createElement("textarea");
+    opt.name = "permission";       
+    opt.value = selectvalue1;
+    //opt.value = document.getElementById(ID2).value;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp);  
+    var opt = document.createElement("textarea");
+    opt.name = "classID";
+    var radio3=document.getElementsByName(ID3);
+    var selectvalue3=null;   //  selectvalue为radio中选中的值
+   for(var k=0;k<radio3.length;k++){
+          if(radio3[k].checked==true) {
+                   selectvalue3=radio3[k].value;
+                   break;
+         }
+  }
+    opt.value = selectvalue3;     
+    // alert(opt.name)        
+    temp.appendChild(opt);
+    document.body.appendChild(temp); 
+    temp.submit();        
+    return temp;        
+}
+ </script> 
+
+<script>
+		$('#tatable tbody').on( 'click', 'tr', function (e) {
+
+			if ( $(this).find("td").hasClass('selected') ) {
+	            $(this).find("td").removeClass('selected');
+	        }
+	        else {
+	            $('td.selected').removeClass('selected');
+	            $(this).find("td").addClass('selected');
+	        }
+		});
+</script>
+		
+		
 </script>
 
         <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->

@@ -7,30 +7,27 @@
 var BaseTableDatatables = function() {
     // Init full DataTable, for more examples you can check out https://www.datatables.net/
     var initDataTableFull = function() {
-        jQuery('.js-dataTable-full').dataTable({
-            columnDefs: [ { "targets":-1,
-            			
-            	} ],
-            pageLength: 10,
+        jQuery('.js-datatable-full').dataTable({
+        	searching:false,
+        	info:false,
+        	paging:false,
+        	
+        	
 
-            searching:false
 
         });
+        
+ 
     };
+    //原本的CSS里没有selected   
 
+    
     // Init simple DataTable, for more examples you can check out https://www.datatables.net/
     var initDataTableSimple = function() {
         jQuery('.js-dataTable-simple').dataTable({
-            columnDefs: [ { orderable: false, targets: [ 4 ] } ],
-            pageLength: 10,
-            lengthMenu: [[5, 10, 15, 20], [5, 10, 15, 20]],
-            searching: false,
-            oLanguage: {
-                sLengthMenu: ""
-            },
-            dom:
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-6'i><'col-sm-6'p>>"
+            searching:false
+            
+         
         });
     };
 
